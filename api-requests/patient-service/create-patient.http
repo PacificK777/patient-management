@@ -1,0 +1,12 @@
+### GET request to create patient
+POST http://localhost:4000/patients
+Content-Type: application/json
+
+{
+  "name": "Sample Name",
+  "address": "Street 1, LA",
+  "email": "valid@sd.com",
+  "dateOfBirth": "1995-03-12",
+  "registrationDate": "2024-09-12"
+}
+###
