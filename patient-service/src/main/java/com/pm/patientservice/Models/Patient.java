@@ -19,19 +19,19 @@ public class Patient {
     private UUID id;
 
     @NotNull
-    private String Name;
+    private String name;
 
     @NotNull
     @Email
     @Column(unique = true)
-    private String Email;
+    private String email;
 
     @NotNull
-    private String Address;
+    private String address;
 
     @NotNull
-    private LocalDate DateOfBirth;
+    private LocalDate dateOfBirth;
 
     @NotNull
-    private LocalDate RegisteredDate;
+    private LocalDate registeredDate;
 }
