@@ -1,0 +1,4 @@
+### GET Api Request via Swagger UI
+GET http://localhost:4000/v3/api-docs
+
+###
