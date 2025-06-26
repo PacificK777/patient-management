@@ -8,6 +8,7 @@ import com.pm.patientservice.Mapper.PatientMapper;
 import com.pm.patientservice.Models.Patient;
 import com.pm.patientservice.Repository.PatientRepository;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
+import com.pm.patientservice.kafka.kafkaProducer;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,11 +19,12 @@ import java.util.UUID;
 public class PatientService {
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final kafkaProducer kafkaProducer;
 
-    PatientService(PatientRepository patientRepository,
-                   BillingServiceGrpcClient billingServiceGrpcClient) {
+    PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, kafkaProducer kafkaProducer) {
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<PatientResponseDTO> getPatients() {
@@ -36,10 +38,10 @@ public class PatientService {
         }
         Patient newPatient = patientRepository.save(PatientMapper.toModel(patientRequestDTO));
 
-        billingServiceGrpcClient.createBillingAccount(
-                newPatient.getId().toString(),
-                newPatient.getName(),
-                newPatient.getEmail());
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(), newPatient.getEmail());
+
+        kafkaProducer.sendEvent(newPatient);
+
         return PatientMapper.toDTO(newPatient);
 
 
